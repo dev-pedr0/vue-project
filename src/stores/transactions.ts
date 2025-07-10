@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { watch } from "vue";
 
 export interface Transaction {
   id: number,
@@ -9,9 +10,39 @@ export interface Transaction {
   date: string,
 }
 
+const transacoesPadrao: Transaction[] = [
+    {
+      id: 1,
+      type: "entrada",
+      amount: 1200,
+      category: "Salário",
+      description: "Salário Mensal",
+      date: "2025-07-01",
+    },
+    {
+      id: 2,
+      type: "saida",
+      amount: 300,
+      category: "Mercado",
+      description: "Compras da semana",
+      date: "2025-07-03",
+    },
+    {
+      id: 3,
+      type: "saida",
+      amount: 150,
+      category: "Transporte",
+      description: "Combustível",
+      date: "2025-07-05",
+    }
+  ]
+
 export const useTransactionStore = defineStore("transaction", {
-  state: () => ({
-    transactions: [] as Transaction[]
+    state: () => ({
+    transactions: (() => {
+      const saved = localStorage.getItem('transactions')
+      return saved ? JSON.parse(saved) as Transaction[] : transacoesPadrao
+    })()
   }),
 
   getters: {
@@ -28,6 +59,12 @@ export const useTransactionStore = defineStore("transaction", {
       state.transactions
         .filter(t => t.type === 'saida')
         .reduce((acc, t) => acc + t.amount, 0),
+
+    transacoesOrdenadasPorData: (state) => {
+      return [...state.transactions].sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      });
+  }
   },
 
   actions: {
@@ -40,3 +77,13 @@ export const useTransactionStore = defineStore("transaction", {
     }
   }
 });
+
+export function setupTransactionStorePersistence(store: ReturnType<typeof useTransactionStore>) {
+  watch(
+    () => store.transactions,
+    (transactions) => {
+      localStorage.setItem('transactions', JSON.stringify(transactions))
+    },
+    { deep: true }
+  )
+}

@@ -2,7 +2,7 @@
 
 Um aplicativo web simples para controle de finanças pessoais, desenvolvido com Vue.js 3, Pinia e Tailwind CSS.
 
-![Screenshot do projeto](screenshot.png) <!-- (adicione uma imagem depois) -->
+![Screenshot do projeto](./public/site-foto.png)
 
 ## 🚀 Tecnologias
 
