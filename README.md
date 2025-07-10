@@ -15,7 +15,7 @@ Um aplicativo web simples para controle de finanças pessoais, desenvolvido com 
 ## 📦 Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/dashboard-financeiro.git
+git clone https://github.com/dev-pedr0/vue-project.git
 cd dashboard-financeiro
 npm install
 npm run dev
